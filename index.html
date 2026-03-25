@@ -14,23 +14,13 @@
     h1 { font-size: 26px; margin: 0; font-weight: 700; display: flex; align-items: center; justify-content: center; }
     h1::before { content: '🚨'; margin-right: 8px; font-size: 24px; }
 
-    /* 🔥 가족사진 공간 - 16:9 비율로 시원하게 확대 */
-    .photo-area {
-      width: 100%; /* 카드 너비에 꽉 차게 */
-      aspect-ratio: 16 / 9; /* 16:9 비율 설정 */
-      border-radius: 15px; /* 원형에서 부드러운 직사각형으로 변경 */
-      background: #f0f0f0;
-      margin: 0 auto 25px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 3px solid #fff; /* 테두리를 약간 얇게 조정 */
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
-    .photo-area img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-area span { font-size: 15px; /* 약간 키움 */ color: #888; text-align: center; line-height: 1.4; padding: 10px; }
+    /* 가족사진 공간 (16:9) */
+    .photo-area { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; background: #f0f0f0; margin: 0 auto 25px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 3px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
+    .photo-area img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2; }
+    .photo-placeholder-text { font-size: 15px; color: #888; text-align: center; line-height: 1.4; display: none; z-index: 1; }
+    body.edit-mode .photo-area:not(.has-photo) { cursor: pointer; border: 2px dashed #3498db; }
+    body.edit-mode .photo-area:not(.has-photo) .photo-placeholder-text { display: block; }
+    body.edit-mode .photo-area.has-photo { cursor: pointer; border: 2px dashed #3498db; }
 
     /* 안내 문구 및 버튼 스타일 */
     .instruction { font-size: 17px; line-height: 1.6; color: #555; margin: 0 0 25px; font-weight: 500; }
@@ -42,13 +32,22 @@
     /* 아이 정보 박스 */
     .info-box { background: #f8f9fa; border-radius: 20px; padding: 22px; text-align: left; font-size: 16px; line-height: 1.8; color: #444; border: 1px solid #e1e8ed; }
     .info-box strong { color: #2c3e50; display: inline-block; width: 75px; font-weight: 600; }
-    .info-box p { margin: 5px 0; }
+    .info-box p { margin: 5px 0; display: flex; align-items: center; }
+    .info-box span.editable-info { display: inline-block; min-width: 100px; min-height: 24px; }
     .info-box .other-contact { display: block; background: #95a5a6; color: #fff; text-decoration: none; text-align: center; padding: 12px; border-radius: 10px; font-weight: 700; margin-top: 15px; font-size: 15px; }
     .thanks { font-size: 14px; color: #777; margin-top: 15px; text-align: center; display: block; width: 100%; line-height: 1.5; }
 
+    /* 🔥 하단 스마트스토어 링크 표기 */
+    .footer-link { text-decoration: none; display: block; -webkit-tap-highlight-color: transparent; }
+    .footer-credit { margin-top: 35px; border-top: 1px solid #e1e8ed; padding-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; color: #888; font-weight: 500; transition: color 0.2s; }
+    .footer-credit svg { width: 16px; height: 16px; fill: #888; transition: fill 0.2s; }
+    /* 터치/마우스 오버 시 네이버 느낌의 초록색으로 변경 */
+    .footer-link:hover .footer-credit, .footer-link:active .footer-credit { color: #03c75a; }
+    .footer-link:hover .footer-credit svg, .footer-link:active .footer-credit svg { fill: #03c75a; }
+    
     /* 관리자 버튼 */
-    .admin-controls { margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; text-align: right; }
-    .btn-admin { font-size: 13px; color: #aaa; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+    .admin-controls { margin-top: 20px; text-align: right; }
+    .btn-admin { font-size: 13px; color: #ccc; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
 
     /* 하단 고정 수정 패널 */
     #editor-panel {
@@ -64,11 +63,12 @@
     .btn-save { background: #27ae60; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px; }
     .btn-close { background: #95a5a6; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px; }
 
-    /* 수정 가능한 요소 시각적 표시 */
-    [contenteditable="true"] { outline: 2px dashed #3498db; background: rgba(52, 152, 219, 0.1); border-radius: 4px; padding: 2px 4px; display: inline-block; min-width: 30px; }
+    /* 수정 가능한 요소 시각적 표시 및 placeholder */
+    [contenteditable="true"] { outline: 2px dashed #3498db; background: rgba(52, 152, 219, 0.1); border-radius: 4px; padding: 2px 6px; }
     [contenteditable="true"]:focus { outline: 2px solid #e74c3c; background: rgba(231, 76, 60, 0.1); }
+    [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #aaa; pointer-events: none; }
 
-    /* 전화번호 전용 입력칸 (수정 모드일 때만 보임) */
+    /* 전화번호 전용 입력칸 */
     .edit-tel { display: none; margin-top: 8px; }
     body.edit-mode .edit-tel { display: block; }
     .edit-tel input { width: 100%; padding: 12px; border-radius: 10px; border: 2px dashed #e74c3c; font-size: 16px; text-align: center; color: #e74c3c; font-weight: bold; box-sizing: border-box; outline: none; background: #fffaf9; }
@@ -78,40 +78,49 @@
 <body>
   <div class="card">
     <div class="header">
-      <h1 id="text-title" contenteditable="false">아이 보호자 연락</h1>
+      <h1>아이 보호자 연락처</h1>
     </div>
 
-    <div class="photo-area" onclick="handlePhotoClick()">
-      <span id="photo-placeholder">가족사진 (터치해서 등록)</span>
+    <div class="photo-area" id="photo-area" onclick="handlePhotoClick()">
+      <span class="photo-placeholder-text">가족사진<br>(터치해서 등록)</span>
       <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="loadPhoto(event)">
-    </div>
+      </div>
 
-    <p class="instruction" id="text-instruction" contenteditable="false">아이를 발견하셨다면 아래 버튼을 눌러<br>보호자에게 연락해주세요.</p>
+    <p class="instruction">아이를 발견하셨다면 아래 버튼을 눌러<br>보호자에게 연락해주세요.</p>
 
     <div class="btn-group">
       <div>
-        <a class="btn primary" id="btn-mom" href="tel:01089157831"><span id="text-mom" contenteditable="false">📞 엄마에게 전화하기</span></a>
-        <div class="edit-tel"><input type="tel" id="input-tel-mom" value="01089157831" placeholder="엄마 전화번호 (숫자만 입력)"></div>
+        <a class="btn primary" id="btn-mom" href="javascript:void(0);">📞 엄마에게 전화하기</a>
+        <div class="edit-tel"><input type="tel" id="input-tel-mom" value="" placeholder="예) 010-0000-0000"></div>
       </div>
       <div>
-        <a class="btn secondary" id="btn-dad" href="tel:01099901733"><span id="text-dad" contenteditable="false">📞 아빠에게 전화하기</span></a>
-        <div class="edit-tel"><input type="tel" id="input-tel-dad" value="01099901733" placeholder="아빠 전화번호 (숫자만 입력)"></div>
+        <a class="btn secondary" id="btn-dad" href="javascript:void(0);">📞 아빠에게 전화하기</a>
+        <div class="edit-tel"><input type="tel" id="input-tel-dad" value="" placeholder="예) 010-0000-0000"></div>
       </div>
     </div>
 
     <div class="info-box">
-      <p><strong>아이이름:</strong> <span id="text-name" contenteditable="false">노하준 Noh Ha Jun (남아)</span></p>
-      <p><strong>생년월일:</strong> <span id="text-birth" contenteditable="false">2024년 06월 29일생</span></p>
-      <p><strong>혈액형:</strong> <span id="text-blood" contenteditable="false">A+</span></p>
-      <p><strong>알러지:</strong> <span id="text-allergy" contenteditable="false">없음</span></p>
+      <p><strong>아이이름:</strong> <span id="text-name" class="editable-info" contenteditable="false" data-placeholder="이름 입력"></span></p>
+      <p><strong>생년월일:</strong> <span id="text-birth" class="editable-info" contenteditable="false" data-placeholder="00년 00월 00일"></span></p>
+      <p><strong>혈액형:</strong> <span id="text-blood" class="editable-info" contenteditable="false" data-placeholder="혈액형 입력"></span></p>
+      <p><strong>알러지:</strong> <span id="text-allergy" class="editable-info" contenteditable="false" data-placeholder="없음 등 입력"></span></p>
       
       <div>
-        <a class="other-contact" id="btn-grandma" href="tel:01020717831"><span id="text-grandma" contenteditable="false">📞 보호자 외 연락처</span></a>
-        <div class="edit-tel"><input type="tel" id="input-tel-grandma" value="01020717831" placeholder="추가 연락처 번호 (숫자만 입력)"></div>
+        <a class="other-contact" id="btn-grandma" href="javascript:void(0);">📞 보호자 외 연락처</a>
+        <div class="edit-tel"><input type="tel" id="input-tel-grandma" value="" placeholder="예) 010-0000-0000"></div>
       </div>
       
-      <span class="thanks" id="text-thanks" contenteditable="false">아이에게 도움이 필요해 보인다면 위 번호로 전화or문자 부탁드립니다. 감사합니다.</span>
+      <span class="thanks">아이에게 도움이 필요해 보인다면 위 번호로 전화or문자 부탁드립니다. 감사합니다.</span>
     </div>
+
+    <a href="https://smartstore.naver.com/orol_xx" target="_blank" class="footer-link">
+      <div class="footer-credit">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M160 112c0-35.3 28.7-64 64-64s64 28.7 64 64v48H160V112zm-48 48H48c-26.5 0-48 21.5-48 48V416c0 53 43 96 96 96H352c53 0 96-43 96-96V208c0-26.5-21.5-48-48-48H336V112C336 50.1 285.9 0 224 0S112 50.1 112 112v48zm24 48a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm152 24a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/>
+        </svg>
+        <span>노댕제작소 | 우리아이지킴이</span>
+      </div>
+    </a>
 
     <div class="admin-controls">
       <button class="btn-admin" onclick="showAdminPrompt()">관리</button>
@@ -129,7 +138,10 @@
   </div>
 
   <script>
-    // 사진 등록 처리
+    const editableElements = ['text-name', 'text-birth', 'text-blood', 'text-allergy'];
+    const telKeys = ['mom', 'dad', 'grandma'];
+
+    // 사진 클릭 처리
     function handlePhotoClick() {
       if (document.body.classList.contains('edit-mode')) {
         document.getElementById('file-input').click();
@@ -140,34 +152,33 @@
     function loadPhoto(event) {
       var reader = new FileReader();
       reader.onload = function(){
-        var output = document.getElementById('photo-placeholder');
-        output.innerHTML = '<img src="' + reader.result + '" alt="가족 사진" id="family-photo">';
+        renderPhoto(reader.result);
         localStorage.setItem('familyPhoto', reader.result);
       };
       if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
     }
 
-    // 초기 데이터 불러오기
+    function renderPhoto(src) {
+      var area = document.getElementById('photo-area');
+      var existingImg = area.querySelector('img');
+      if(existingImg) existingImg.remove();
+
+      var img = document.createElement('img');
+      img.src = src;
+      area.appendChild(img);
+      area.classList.add('has-photo');
+    }
+
+    // 초기 데이터 로딩
     window.onload = function() {
       var savedPhoto = localStorage.getItem('familyPhoto');
-      if (savedPhoto) {
-        var output = document.getElementById('photo-placeholder');
-        output.innerHTML = '<img src="' + savedPhoto + '" alt="가족 사진" id="family-photo">';
-      }
+      if (savedPhoto) renderPhoto(savedPhoto);
 
-      // 텍스트 불러오기
-      const editableElements = [
-        'text-title', 'text-instruction', 'text-mom', 'text-dad',
-        'text-name', 'text-birth', 'text-blood', 'text-allergy',
-        'text-grandma', 'text-thanks'
-      ];
       editableElements.forEach(id => {
         const savedText = localStorage.getItem(id);
         if (savedText) document.getElementById(id).innerText = savedText;
       });
 
-      // 저장된 전화번호 불러오기 및 셋팅
-      const telKeys = ['mom', 'dad', 'grandma'];
       telKeys.forEach(key => {
         const savedTel = localStorage.getItem('tel-' + key);
         if (savedTel) {
@@ -177,7 +188,7 @@
       });
     }
 
-    // 관리자 비밀번호
+    // 관리자 진입
     function showAdminPrompt() {
       const password = prompt("관리자 비밀번호를 입력하세요:", "");
       if (password === "0000") {
@@ -187,53 +198,49 @@
       }
     }
 
-    // 편집 모드 켜기
     function showEditor() {
       document.body.classList.add('edit-mode');
       document.getElementById('editor-panel').style.display = 'block';
       
-      const editableElements = document.querySelectorAll('[contenteditable="false"]');
-      editableElements.forEach(el => el.setAttribute('contenteditable', 'true'));
+      editableElements.forEach(id => {
+        document.getElementById(id).setAttribute('contenteditable', 'true');
+      });
 
-      // 수정 중에는 버튼이 안 눌리게 임시로 링크 해제
       document.querySelectorAll('.btn, .other-contact').forEach(el => {
         el.setAttribute('data-href', el.getAttribute('href'));
         el.removeAttribute('href');
       });
     }
 
-    // 편집 취소 (새로고침)
     function cancelEdits() {
       if(confirm("수정한 내용을 취소하시겠습니까?")) {
         location.reload();
       }
     }
 
-    // 수정 내용 저장
     function saveEdits() {
-      // 1. 텍스트 저장
-      const editableElements = [
-        'text-title', 'text-instruction', 'text-mom', 'text-dad',
-        'text-name', 'text-birth', 'text-blood', 'text-allergy',
-        'text-grandma', 'text-thanks'
-      ];
       editableElements.forEach(id => {
-        localStorage.setItem(id, document.getElementById(id).innerText);
+        const el = document.getElementById(id);
+        localStorage.setItem(id, el.innerText.trim());
+        el.setAttribute('contenteditable', 'false');
       });
 
-      // 2. 입력된 전화번호만 따로 저장
-      const telKeys = ['mom', 'dad', 'grandma'];
       telKeys.forEach(key => {
-        let inputVal = document.getElementById('input-tel-' + key).value.replace(/[^0-9]/g, '');
-        localStorage.setItem('tel-' + key, inputVal);
-        document.getElementById('btn-' + key).setAttribute('href', 'tel:' + inputVal);
+        let rawInput = document.getElementById('input-tel-' + key).value;
+        let onlyNumbers = rawInput.replace(/[^0-9]/g, '');
+        
+        localStorage.setItem('tel-' + key, rawInput);
+        
+        const btn = document.getElementById('btn-' + key);
+        if(onlyNumbers.length > 0) {
+          btn.setAttribute('href', 'tel:' + onlyNumbers);
+        } else {
+          btn.setAttribute('href', 'javascript:void(0);');
+        }
       });
 
-      // 편집 모드 종료
       document.body.classList.remove('edit-mode');
       document.getElementById('editor-panel').style.display = 'none';
-      const activeElements = document.querySelectorAll('[contenteditable="true"]');
-      activeElements.forEach(el => el.setAttribute('contenteditable', 'false'));
       
       alert("성공적으로 저장되었습니다.");
     }
