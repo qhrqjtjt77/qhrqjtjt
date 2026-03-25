@@ -5,112 +5,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>아이 보호자 연락처</title>
   <style>
-    /* 기본 스타일 설정 */
-    body { margin: 0; font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; background: #eef2f5; color: #333; text-align: center; padding: 20px 10px 80px; }
-    .card { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 25px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); overflow: hidden; position: relative; }
+    /* 기본 스타일 - 아이와 어울리는 따뜻한 베이지/크림 배경 */
+    body { margin: 0; font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; background: #fdf8eb; color: #333; text-align: center; padding: 20px 10px 80px; }
+    .card { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 30px; padding: 30px 20px; box-shadow: 0 12px 35px rgba(0,0,0,0.08); overflow: hidden; position: relative; }
 
-    /* 헤더 스타일 */
-    .header { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); margin: -30px -20px 25px; padding: 25px 20px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; color: #2c3e50; }
-    h1 { font-size: 26px; margin: 0; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-    h1::before { content: '🚨'; margin-right: 8px; font-size: 24px; }
+    /* 헤더 스타일 - 눈에 확 띄는 병아리/안전 노란색 */
+    .header { background: linear-gradient(135deg, #ffd84d 0%, #ffc000 100%); margin: -30px -20px 25px; padding: 25px 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; color: #5a3e00; }
+    h1 { font-size: 24px; margin: 0; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
     /* 가족사진 공간 (16:9) */
-    .photo-area { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; background: #f0f0f0; margin: 0 auto 25px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 3px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
+    .photo-area { width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; background: #f4f4f4; margin: 0 auto 25px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 4px solid #fff; box-shadow: 0 6px 15px rgba(0,0,0,0.06); position: relative; }
     .photo-area img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2; }
-    .photo-placeholder-text { font-size: 15px; color: #888; text-align: center; line-height: 1.4; display: none; z-index: 1; }
-    body.edit-mode .photo-area:not(.has-photo) { cursor: pointer; border: 2px dashed #3498db; }
-    body.edit-mode .photo-area:not(.has-photo) .photo-placeholder-text { display: block; }
-    body.edit-mode .photo-area.has-photo { cursor: pointer; border: 2px dashed #3498db; }
+    .photo-placeholder-text { font-size: 15px; color: #999; text-align: center; line-height: 1.4; display: none; z-index: 1; font-weight: 600; }
+    body.edit-mode .photo-area:not(.has-photo) { cursor: pointer; border: 3px dashed #ffc000; background: #fffcf0; }
+    body.edit-mode .photo-area:not(.has-photo) .photo-placeholder-text { display: block; color: #d4a000; }
+    body.edit-mode .photo-area.has-photo { cursor: pointer; border: 3px dashed #ffc000; }
 
-    /* 안내 문구 및 버튼 스타일 */
-    .instruction { font-size: 17px; line-height: 1.6; color: #555; margin: 0 0 25px; font-weight: 500; }
-    .btn-group { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
-    .btn { display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 18px; border-radius: 15px; font-size: 20px; font-weight: 700; color: #fff; transition: background 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .btn.primary { background: #e74c3c; }
-    .btn.secondary { background: #34495e; }
+    /* 안내 문구 */
+    .instruction { font-size: 17px; line-height: 1.6; color: #e15f41; margin: 0 0 25px; font-weight: 700; background: #ffeeea; padding: 12px; border-radius: 15px; }
+
+    /* 버튼 스타일 - 대비가 확실하고 따뜻한 색상 */
+    .btn-group { display: flex; flex-direction: column; gap: 14px; margin-bottom: 25px; }
+    .btn { display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 18px; border-radius: 20px; font-size: 20px; font-weight: 800; color: #fff; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 0 6px 15px rgba(0,0,0,0.12); }
+    .btn:active { transform: scale(0.98); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    
+    .btn.primary { background: linear-gradient(135deg, #ff7e67 0%, #ff5252 100%); } /* 엄마: 따뜻한 코랄 레드 */
+    .btn.secondary { background: linear-gradient(135deg, #4aabff 0%, #1e90ff 100%); } /* 아빠: 밝고 맑은 블루 */
 
     /* 아이 정보 박스 */
-    .info-box { background: #f8f9fa; border-radius: 20px; padding: 22px; text-align: left; font-size: 16px; line-height: 1.8; color: #444; border: 1px solid #e1e8ed; }
-    .info-box strong { color: #2c3e50; display: inline-block; width: 75px; font-weight: 600; }
-    .info-box p { margin: 5px 0; display: flex; align-items: center; }
-    .info-box span.editable-info { display: inline-block; min-width: 100px; min-height: 24px; }
-    .info-box .other-contact { display: block; background: #95a5a6; color: #fff; text-decoration: none; text-align: center; padding: 12px; border-radius: 10px; font-weight: 700; margin-top: 15px; font-size: 15px; }
-    .thanks { font-size: 14px; color: #777; margin-top: 15px; text-align: center; display: block; width: 100%; line-height: 1.5; }
+    .info-box { background: #fdfdfd; border-radius: 20px; padding: 22px; text-align: left; font-size: 16px; line-height: 1.8; color: #444; border: 2px solid #f0f0f0; }
+    .info-box strong { color: #5a3e00; display: inline-block; width: 75px; font-weight: 700; }
+    .info-box p { margin: 6px 0; display: flex; align-items: center; }
+    .info-box span.editable-info { display: inline-block; min-width: 100px; min-height: 24px; color: #111; font-weight: 500; }
+    
+    .other-contact { display: flex; align-items: center; justify-content: center; gap: 8px; background: #2bcbba; color: #fff; text-decoration: none; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; font-size: 16px; box-shadow: 0 4px 10px rgba(43,203,186,0.3); }
+    .other-contact:active { transform: scale(0.98); }
 
-    /* 🔥 하단 스마트스토어 링크 표기 */
+    /* 수정된 하단 감사 문구 (줄바꿈 적용) */
+    .thanks { font-size: 15px; color: #666; margin-top: 20px; text-align: center; display: block; width: 100%; line-height: 1.6; font-weight: 600; }
+
+    /* 하단 스마트스토어 링크 표기 */
     .footer-link { text-decoration: none; display: block; -webkit-tap-highlight-color: transparent; }
-    .footer-credit { margin-top: 35px; border-top: 1px solid #e1e8ed; padding-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; color: #888; font-weight: 500; transition: color 0.2s; }
-    .footer-credit svg { width: 16px; height: 16px; fill: #888; transition: fill 0.2s; }
-    /* 터치/마우스 오버 시 네이버 느낌의 초록색으로 변경 */
+    .footer-credit { margin-top: 35px; border-top: 2px dashed #eee; padding-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; color: #aaa; font-weight: 600; transition: color 0.2s; }
+    .footer-credit svg { width: 16px; height: 16px; fill: #aaa; transition: fill 0.2s; }
     .footer-link:hover .footer-credit, .footer-link:active .footer-credit { color: #03c75a; }
     .footer-link:hover .footer-credit svg, .footer-link:active .footer-credit svg { fill: #03c75a; }
     
     /* 관리자 버튼 */
     .admin-controls { margin-top: 20px; text-align: right; }
-    .btn-admin { font-size: 13px; color: #ccc; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+    .btn-admin { font-size: 13px; color: #ddd; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
 
     /* 하단 고정 수정 패널 */
     #editor-panel {
       display: none; position: fixed; bottom: 0; left: 0; width: 100%;
-      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
-      box-shadow: 0 -5px 20px rgba(0,0,0,0.15); z-index: 1000;
-      padding: 15px 20px; box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 1000;
+      padding: 15px 20px; box-sizing: border-box; border-top-left-radius: 20px; border-top-right-radius: 20px;
     }
     .editor-container { max-width: 480px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    .editor-msg { font-size: 14px; font-weight: bold; color: #e74c3c; animation: blink 1.5s infinite; }
-    @keyframes blink { 50% { opacity: 0.5; } }
+    .editor-msg { font-size: 14px; font-weight: 800; color: #e15f41; animation: blink 1.5s infinite; }
+    @keyframes blink { 50% { opacity: 0.6; } }
     .editor-btns { display: flex; gap: 8px; }
-    .btn-save { background: #27ae60; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px; }
-    .btn-close { background: #95a5a6; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px; }
+    .btn-save { background: #ff7e67; color: #fff; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 15px; }
+    .btn-close { background: #ccc; color: #fff; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 15px; }
 
     /* 수정 가능한 요소 시각적 표시 및 placeholder */
-    [contenteditable="true"] { outline: 2px dashed #3498db; background: rgba(52, 152, 219, 0.1); border-radius: 4px; padding: 2px 6px; }
-    [contenteditable="true"]:focus { outline: 2px solid #e74c3c; background: rgba(231, 76, 60, 0.1); }
-    [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #aaa; pointer-events: none; }
+    [contenteditable="true"] { outline: 2px dashed #ffc000; background: rgba(255, 192, 0, 0.1); border-radius: 6px; padding: 2px 8px; }
+    [contenteditable="true"]:focus { outline: 2px solid #ff7e67; background: rgba(255, 126, 103, 0.1); }
+    [contenteditable="true"]:empty:before { content: attr(data-placeholder); color: #bbb; pointer-events: none; }
 
     /* 전화번호 전용 입력칸 */
-    .edit-tel { display: none; margin-top: 8px; }
+    .edit-tel { display: none; margin-top: 10px; }
     body.edit-mode .edit-tel { display: block; }
-    .edit-tel input { width: 100%; padding: 12px; border-radius: 10px; border: 2px dashed #e74c3c; font-size: 16px; text-align: center; color: #e74c3c; font-weight: bold; box-sizing: border-box; outline: none; background: #fffaf9; }
-    .edit-tel input::placeholder { color: #ffa8a0; font-weight: normal; font-size: 14px; }
+    .edit-tel input { width: 100%; padding: 14px; border-radius: 12px; border: 2px dashed #ff7e67; font-size: 16px; text-align: center; color: #ff7e67; font-weight: bold; box-sizing: border-box; outline: none; background: #fffcfb; }
+    .edit-tel input::placeholder { color: #ffc2b3; font-weight: normal; font-size: 14px; }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="header">
-      <h1>아이 보호자 연락처</h1>
+      <h1>🚨 아이 보호자 연락처 🧸</h1>
     </div>
 
     <div class="photo-area" id="photo-area" onclick="handlePhotoClick()">
       <span class="photo-placeholder-text">가족사진<br>(터치해서 등록)</span>
       <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="loadPhoto(event)">
-      </div>
+    </div>
 
-    <p class="instruction">아이를 발견하셨다면 아래 버튼을 눌러<br>보호자에게 연락해주세요.</p>
+    <p class="instruction">길을 잃은 아이를 발견하셨다면<br>아래 버튼을 눌러 연락해주세요 🆘</p>
 
     <div class="btn-group">
       <div>
-        <a class="btn primary" id="btn-mom" href="javascript:void(0);">📞 엄마에게 전화하기</a>
+        <a class="btn primary" id="btn-mom" href="javascript:void(0);">👩 엄마에게 전화하기 📱</a>
         <div class="edit-tel"><input type="tel" id="input-tel-mom" value="" placeholder="예) 010-0000-0000"></div>
       </div>
       <div>
-        <a class="btn secondary" id="btn-dad" href="javascript:void(0);">📞 아빠에게 전화하기</a>
+        <a class="btn secondary" id="btn-dad" href="javascript:void(0);">👨 아빠에게 전화하기 📱</a>
         <div class="edit-tel"><input type="tel" id="input-tel-dad" value="" placeholder="예) 010-0000-0000"></div>
       </div>
     </div>
 
     <div class="info-box">
-      <p><strong>아이이름:</strong> <span id="text-name" class="editable-info" contenteditable="false" data-placeholder="이름 입력"></span></p>
+      <p><strong>아이이름:</strong> <span id="text-name" class="editable-info" contenteditable="false" data-placeholder="이름 (성별) 입력"></span></p>
       <p><strong>생년월일:</strong> <span id="text-birth" class="editable-info" contenteditable="false" data-placeholder="00년 00월 00일"></span></p>
       <p><strong>혈액형:</strong> <span id="text-blood" class="editable-info" contenteditable="false" data-placeholder="혈액형 입력"></span></p>
       <p><strong>알러지:</strong> <span id="text-allergy" class="editable-info" contenteditable="false" data-placeholder="없음 등 입력"></span></p>
       
       <div>
-        <a class="other-contact" id="btn-grandma" href="javascript:void(0);">📞 보호자 외 연락처</a>
+        <a class="other-contact" id="btn-grandma" href="javascript:void(0);">👵 보호자 외 연락처 📱</a>
         <div class="edit-tel"><input type="tel" id="input-tel-grandma" value="" placeholder="예) 010-0000-0000"></div>
       </div>
       
-      <span class="thanks">아이에게 도움이 필요해 보인다면 위 번호로 전화or문자 부탁드립니다. 감사합니다.</span>
+      <span class="thanks">아이에게 도움이 필요해 보인다면 위 번호로 전화 부탁드립니다.<br>💛 감사합니다 💛</span>
     </div>
 
     <a href="https://smartstore.naver.com/orol_xx" target="_blank" class="footer-link">
@@ -141,14 +147,12 @@
     const editableElements = ['text-name', 'text-birth', 'text-blood', 'text-allergy'];
     const telKeys = ['mom', 'dad', 'grandma'];
 
-    // 사진 클릭 처리
     function handlePhotoClick() {
       if (document.body.classList.contains('edit-mode')) {
         document.getElementById('file-input').click();
       }
     }
 
-    // 사진 로드 및 저장
     function loadPhoto(event) {
       var reader = new FileReader();
       reader.onload = function(){
@@ -169,7 +173,6 @@
       area.classList.add('has-photo');
     }
 
-    // 초기 데이터 로딩
     window.onload = function() {
       var savedPhoto = localStorage.getItem('familyPhoto');
       if (savedPhoto) renderPhoto(savedPhoto);
@@ -188,7 +191,6 @@
       });
     }
 
-    // 관리자 진입
     function showAdminPrompt() {
       const password = prompt("관리자 비밀번호를 입력하세요:", "");
       if (password === "0000") {
