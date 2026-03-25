@@ -5,86 +5,196 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>아이 보호자 연락처</title>
   <style>
-    body{
-      margin:0;
-      font-family: Arial, sans-serif;
-      background:#f8f8f8;
-      color:#111;
-      text-align:center;
-      padding:20px;
-    }
-    .card{
-      max-width:520px;
-      margin:0 auto;
-      background:#fff;
-      border-radius:20px;
-      padding:28px 20px;
-      box-shadow:0 8px 24px rgba(0,0,0,0.08);
-    }
-    h1{
-      font-size:28px;
-      margin:0 0 12px;
-    }
-    p{
-      font-size:18px;
-      line-height:1.6;
-      margin:0 0 18px;
-    }
-    .btn{
-      display:block;
-      text-decoration:none;
-      margin:14px 0;
-      padding:18px 16px;
-      border-radius:14px;
-      font-size:22px;
-      font-weight:bold;
-      color:#fff;
-      background:#e74c3c;
-    }
-    .btn.secondary{
-      background:#333;
-    }
-  .btn2{
-      display:block;
-      text-decoration:none;
-      margin:10px 0;
-      padding:9px 7px;
-      border-radius:7px;
-      font-size:15px;
-      font-weight:bold;
-      color:#fff;
-      background:#e74c3c;
-    }
-    .btn2.secondary{
-      background:#333;
-    }
-    .info{
-      margin-top:18px;
-      padding:16px;
-      background:#f2f2f2;
-      border-radius:14px;
-      font-size:16px;
-      line-height:1.7;
-    }
+    /* 기본 스타일 설정 - 깔끔하고 포근한 느낌 */
+    body { margin: 0; font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; background: #eef2f5; color: #333; text-align: center; padding: 20px 10px; }
+    .card { max-width: 480px; margin: 0 auto; background: #fff; border-radius: 25px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); overflow: hidden; position: relative; }
+
+    /* 헤더 스타일 - 차분한 블루 그라데이션 */
+    .header { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); margin: -30px -20px 25px; padding: 25px 20px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; color: #2c3e50; }
+    h1 { font-size: 26px; margin: 0; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    h1::before { content: '🚨'; margin-right: 8px; font-size: 24px; }
+
+    /* 가족사진 공간 - 둥글고 크게 */
+    .photo-area { width: 150px; height: 150px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer; }
+    .photo-area img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-area span { font-size: 14px; color: #888; text-align: center; line-height: 1.2; padding: 10px; }
+
+    /* 안내 문구 스타일 */
+    .instruction { font-size: 17px; line-height: 1.6; color: #555; margin: 0 0 25px; font-weight: 500; }
+
+    /* 버튼 스타일 - 긴급 상황에 잘 띄게 */
+    .btn-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+    .btn { display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 18px; border-radius: 15px; font-size: 20px; font-weight: 700; color: #fff; transition: background 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .btn.primary { background: #e74c3c; } /* 긴급 전화 (엄마) */
+    .btn.primary:active { background: #c0392b; }
+    .btn.secondary { background: #34495e; } /* 긴급 전화 (아빠) */
+    .btn.secondary:active { background: #2c3e50; }
+
+    /* 아이 정보 박스 스타일 - 깔끔한 카드 형식 */
+    .info-box { background: #f8f9fa; border-radius: 20px; padding: 22px; text-align: left; font-size: 16px; line-height: 1.8; color: #444; border: 1px solid #e1e8ed; }
+    .info-box strong { color: #2c3e50; display: inline-block; width: 75px; font-weight: 600; }
+    .info-box .other-contact { display: block; background: #95a5a6; color: #fff; text-decoration: none; text-align: center; padding: 12px; border-radius: 10px; font-weight: 700; margin-top: 15px; font-size: 15px; transition: background 0.2s; }
+    .info-box .other-contact:active { background: #7f8c8d; }
+    .thanks { font-size: 15px; color: #777; margin-top: 20px; text-align: center; display: block; width: 100%;}
+
+    /* 관리자 페이지 관련 스타일 (기본적으로 숨김) */
+    .admin-controls { margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; text-align: right; }
+    .btn-admin { font-size: 13px; color: #aaa; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+    #editor-panel { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+    .editor-card { background: #fff; border-radius: 20px; padding: 30px; width: 90%; max-width: 400px; text-align: left; }
+    .editor-card h3 { margin-top: 0; color: #2c3e50; }
+    .editor-card label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; font-size: 14px; }
+    .editor-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .btn-save { background: #27ae60; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-close { background: #bbb; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+    /* 수정 가능한 요소 표시 */
+    [contenteditable="true"]:focus { outline: 2px solid #3498db; background: #f0f8ff; border-radius: 4px; padding: 2px; }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>🚨 아이 보호자 연락</h1>
-    <p>아이를 발견하셨다면 아래 버튼을 눌러<br>보호자에게 연락해주세요.</p>
+    <div class="header">
+      <h1 id="text-title" contenteditable="false">아이 보호자 연락</h1>
+    </div>
 
-    <a class="btn" href="tel:01089157831">📞 엄마에게 전화하기</a>
-    <a class="btn secondary" href="tel:01099901733">📞 아빠에게 전화하기</a>
+    <div class="photo-area" onclick="handlePhotoClick()">
+      <span id="photo-placeholder">가족사진<br>(터치해서 등록)</span>
+      <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="loadPhoto(event)">
+    </div>
 
-    <div class="info">
-      아이이름 :  노하준 Noh Ha Jun (남아) <br> 
-      생년월일 : 2024년 06월 29일생 <br>
-         혈액형 : A+ / 알러지 : 없음 <br>
-<a class="btn2.secondary" href="tel:01020717831">📞 보호자 외 연락처 (외할머니)</a><br>
-   아이에게 도움이 필요해 보인다면  <br> 
-   위 번호로 전화or문자 부탁드립니다.  <br>
-   감사합니다   
+    <p class="instruction" id="text-instruction" contenteditable="false">아이를 발견하셨다면 아래 버튼을 눌러<br>보호자에게 연락해주세요.</p>
+
+    <div class="btn-group">
+      <a class="btn primary" id="btn-mom" href="tel:01089157831"><span id="text-mom" contenteditable="false">📞 엄마에게 전화하기</span></a>
+      <a class="btn secondary" id="btn-dad" href="tel:01099901733"><span id="text-dad" contenteditable="false">📞 아빠에게 전화하기</span></a>
+    </div>
+
+    <div class="info-box">
+      <p><strong>아이이름:</strong> <span id="text-name" contenteditable="false">노하준 Noh Ha Jun (남아)</span></p>
+      <p><strong>생년월일:</strong> <span id="text-birth" contenteditable="false">2024년 06월 29일생</span></p>
+      <p><strong>혈액형:</strong> <span id="text-blood" contenteditable="false">A+</span> / <strong>알러지:</strong> <span id="text-allergy" contenteditable="false">없음</span></p>
+      <a class="other-contact" id="btn-grandma" href="tel:01020717831"><span id="text-grandma" contenteditable="false">📞 보호자 외 연락처 (외할머니)</span></a>
+      <span class="thanks" id="text-thanks" contenteditable="false">아이에게 도움이 필요해 보인다면 위 번호로 전화or문자 부탁드립니다. 감사합니다.</span>
+    </div>
+
+    <div class="admin-controls">
+      <button class="btn-admin" onclick="showAdminPrompt()">관리</button>
     </div>
   </div>
+
+  <div id="editor-panel">
+    <div class="editor-card">
+      <h3>정보 수정 모드</h3>
+      <p style="color: #777; font-size: 14px; margin-bottom: 20px;">비밀번호가 확인되었습니다.<br>이제 페이지 내의 모든 텍스트를 터치하여 직접 수정할 수 있습니다.</p>
+      <p style="color: #e74c3c; font-size: 13px;">※ 전화번호 버튼 수정 시, 텍스트 안의 전화번호 형식(예: 01012345678)을 정확히 입력해야 전화 연결이 업데이트됩니다.</p>
+      <div class="editor-btns">
+        <button class="btn-close" onclick="hideEditor()">닫기</button>
+        <button class="btn-save" onclick="saveEdits()">저장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 사진 등록 처리
+    function handlePhotoClick() {
+      if (document.getElementById('text-title').getAttribute('contenteditable') === 'true') {
+        document.getElementById('file-input').click();
+      }
+    }
+
+    // 사진 로드 및 저장 기능
+    function loadPhoto(event) {
+      var reader = new FileReader();
+      reader.onload = function(){
+        var output = document.getElementById('photo-placeholder');
+        output.innerHTML = '<img src="' + reader.result + '" alt="가족 사진" id="family-photo">';
+        localStorage.setItem('familyPhoto', reader.result); // 로컬 스토리지에 사진 저장
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // 초기 로드 시 저장된 정보 불러오기
+    window.onload = function() {
+      // 사진 불러오기
+      var savedPhoto = localStorage.getItem('familyPhoto');
+      if (savedPhoto) {
+        var output = document.getElementById('photo-placeholder');
+        output.innerHTML = '<img src="' + savedPhoto + '" alt="가족 사진" id="family-photo">';
+      }
+
+      // 텍스트 및 전화번호 불러오기
+      const editableElements = [
+        'text-title', 'text-instruction', 'text-mom', 'text-dad',
+        'text-name', 'text-birth', 'text-blood', 'text-allergy',
+        'text-grandma', 'text-thanks'
+      ];
+      editableElements.forEach(id => {
+        const savedText = localStorage.getItem(id);
+        if (savedText) {
+          document.getElementById(id).innerText = savedText;
+        }
+      });
+
+      // 전화번호 링크 불러오기
+      if (localStorage.getItem('tel-mom')) document.getElementById('btn-mom').href = 'tel:' + localStorage.getItem('tel-mom');
+      if (localStorage.getItem('tel-dad')) document.getElementById('btn-dad').href = 'tel:' + localStorage.getItem('tel-dad');
+      if (localStorage.getItem('tel-grandma')) document.getElementById('btn-grandma').href = 'tel:' + localStorage.getItem('tel-grandma');
+    }
+
+    // 관리자 비밀번호 확인 및 수정 모드 활성화
+    function showAdminPrompt() {
+      const password = prompt("관리자 비밀번호를 입력하세요:", "");
+      if (password === "0000") { // 초기 비밀번호: 0000
+        showEditor();
+      } else if (password !== null) {
+        alert("비밀번호가 틀렸습니다.");
+      }
+    }
+
+    // 수정 패널 표시 및 편집 기능 활성화
+    function showEditor() {
+      document.getElementById('editor-panel').style.display = 'flex';
+      // 모든 수정 가능 요소 활성화
+      const editableElements = document.querySelectorAll('[contenteditable="false"]');
+      editableElements.forEach(el => el.setAttribute('contenteditable', 'true'));
+    }
+
+    // 수정 패널 숨기기 및 편집 기능 비활성화
+    function hideEditor() {
+      document.getElementById('editor-panel').style.display = 'none';
+      // 모든 수정 가능 요소 비활성화
+      const editableElements = document.querySelectorAll('[contenteditable="true"]');
+      editableElements.forEach(el => el.setAttribute('contenteditable', 'false'));
+    }
+
+    // 수정한 내용 저장
+    function saveEdits() {
+      const editableElements = [
+        'text-title', 'text-instruction', 'text-mom', 'text-dad',
+        'text-name', 'text-birth', 'text-blood', 'text-allergy',
+        'text-grandma', 'text-thanks'
+      ];
+      
+      // 텍스트 저장 및 전화번호 추출
+      editableElements.forEach(id => {
+        const text = document.getElementById(id).innerText;
+        localStorage.setItem(id, text);
+
+        // 전화번호 추출 및 저장
+        if (['text-mom', 'text-dad', 'text-grandma'].includes(id)) {
+          const telMatch = text.match(/01\d{8,9}/);
+          if (telMatch) {
+            const btnId = id.replace('text-', 'btn-');
+            document.getElementById(btnId).href = 'tel:' + telMatch[0];
+            localStorage.setItem(btnId.replace('btn-', 'tel-'), telMatch[0]);
+          }
+        }
+      });
+
+      alert("정보가 성공적으로 저장되었습니다.");
+      hideEditor();
+    }
+  </script>
 </body>
 </html>
