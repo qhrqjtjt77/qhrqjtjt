@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>아이 보호자 연락처</title>
+  <title id="dynamic-page-title">아이 보호자 연락처</title>
   <style>
     /* 기본 스타일 - 아이와 어울리는 따뜻한 베이지/크림 배경 */
     body { margin: 0; font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; background: #fdf8eb; color: #333; text-align: center; padding: 20px 10px 80px; }
@@ -41,7 +41,7 @@
     .other-contact { display: flex; align-items: center; justify-content: center; gap: 8px; background: #2bcbba; color: #fff; text-decoration: none; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; font-size: 16px; box-shadow: 0 4px 10px rgba(43,203,186,0.3); }
     .other-contact:active { transform: scale(0.98); }
 
-    /* 🔥 하단 안심 독려 문구 - 작고 차분한 회색 톤으로 복구 */
+    /* 하단 안심 독려 문구 - 작고 차분한 회색 톤 */
     .thanks { font-size: 14px; color: #777; margin-top: 20px; text-align: center; display: block; width: 100%; line-height: 1.6; font-weight: 500; }
 
     /* 하단 스마트스토어 링크 표기 */
@@ -84,7 +84,7 @@
 <body>
   <div class="card">
     <div class="header">
-      <h1>🚨 아이 보호자 연락처 🧸</h1>
+      <h1 id="dynamic-header-title"></h1>
     </div>
 
     <div class="photo-area" id="photo-area" onclick="handlePhotoClick()">
@@ -92,15 +92,15 @@
       <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="loadPhoto(event)">
     </div>
 
-    <p class="instruction">아이에게 도움이 필요해 보인다면<br>아래 버튼으로 전화 부탁드립니다.<br>💛 감사합니다 💛</p>
+    <p class="instruction" id="dynamic-instruction"></p>
 
     <div class="btn-group">
       <div>
-        <a class="btn primary" id="btn-mom" href="javascript:void(0);">👩 엄마에게 전화하기 📱</a>
+        <a class="btn primary" id="btn-mom" href="javascript:void(0);"><span id="dynamic-btn-mom"></span></a>
         <div class="edit-tel"><input type="tel" id="input-tel-mom" value="" placeholder="예) 010-0000-0000"></div>
       </div>
       <div>
-        <a class="btn secondary" id="btn-dad" href="javascript:void(0);">👨 아빠에게 전화하기 📱</a>
+        <a class="btn secondary" id="btn-dad" href="javascript:void(0);"><span id="dynamic-btn-dad"></span></a>
         <div class="edit-tel"><input type="tel" id="input-tel-dad" value="" placeholder="예) 010-0000-0000"></div>
       </div>
     </div>
@@ -112,24 +112,24 @@
       <p><strong>알러지:</strong> <span id="text-allergy" class="editable-info" contenteditable="false" data-placeholder="없음 등 입력"></span></p>
       
       <div>
-        <a class="other-contact" id="btn-grandma" href="javascript:void(0);">👵 보호자 외 연락처 📱</a>
+        <a class="other-contact" id="btn-grandma" href="javascript:void(0);"><span id="dynamic-btn-other"></span></a>
         <div class="edit-tel"><input type="tel" id="input-tel-grandma" value="" placeholder="예) 010-0000-0000"></div>
       </div>
       
-      <span class="thanks">늦은 시간이나 사소한 일이라도 괜찮습니다.<br>아이가 혼자 있다면 망설이지 말고 꼭 연락해 주세요.<br>당신의 작은 관심이 큰 도움이 됩니다. 🙏</span>
+      <span class="thanks" id="dynamic-thanks"></span>
     </div>
 
-    <a href="https://smartstore.naver.com/orol_xx" target="_blank" class="footer-link">
+    <a href="#" target="_blank" class="footer-link" id="dynamic-store-link">
       <div class="footer-credit">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
           <path d="M160 112c0-35.3 28.7-64 64-64s64 28.7 64 64v48H160V112zm-48 48H48c-26.5 0-48 21.5-48 48V416c0 53 43 96 96 96H352c53 0 96-43 96-96V208c0-26.5-21.5-48-48-48H336V112C336 50.1 285.9 0 224 0S112 50.1 112 112v48zm24 48a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm152 24a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/>
         </svg>
-        <span>노댕제작소 | 우리아이지킴이</span>
+        <span id="dynamic-store-name"></span>
       </div>
     </a>
 
     <div class="admin-controls">
-      <button class="btn-admin" onclick="showAdminPrompt()">관리</button>
+      <button class="btn-admin" onclick="showAdminPrompt()">⚙️ 관리</button>
     </div>
   </div>
 
@@ -144,8 +144,48 @@
   </div>
 
   <script>
+    // =========================================================================
+    // ⚙️ 템플릿 기본 설정 (이곳에서 고정된 문구들을 쉽게 수정하세요!)
+    // =========================================================================
+    const TEMPLATE_CONFIG = {
+      // 1. 브라우저 탭 이름
+      pageTitle: "아이 보호자 연락처",
+      
+      // 2. 메인 제목
+      headerTitle: "🚨 아이 보호자 연락처 🧸",
+      
+      // 3. 상단 안내 문구 (<br>은 줄바꿈입니다)
+      instructionText: "아이에게 도움이 필요해 보인다면<br>아래 버튼으로 전화 부탁드립니다.<br>💛 감사합니다 💛",
+      
+      // 4. 버튼 이름
+      btnMomText: "👩 엄마에게 전화하기 📱",
+      btnDadText: "👨 아빠에게 전화하기 📱",
+      btnOtherText: "👵 보호자 외 연락처 📱",
+      
+      // 5. 하단 안심 독려 문구
+      thanksText: "늦은 시간이나 사소한 일이라도 괜찮습니다.<br>아이가 혼자 있다면 망설이지 말고 꼭 연락해 주세요.<br>당신의 작은 관심이 큰 도움이 됩니다. 🙏",
+      
+      // 6. 스마트스토어 정보
+      storeLink: "https://smartstore.naver.com/orol_xx",
+      storeName: "노댕제작소 | 우리아이지킴이"
+    };
+    // =========================================================================
+
     const editableElements = ['text-name', 'text-birth', 'text-blood', 'text-allergy'];
     const telKeys = ['mom', 'dad', 'grandma'];
+
+    // 템플릿 설정을 화면에 적용하는 함수
+    function applyTemplateConfig() {
+      document.getElementById('dynamic-page-title').innerText = TEMPLATE_CONFIG.pageTitle;
+      document.getElementById('dynamic-header-title').innerText = TEMPLATE_CONFIG.headerTitle;
+      document.getElementById('dynamic-instruction').innerHTML = TEMPLATE_CONFIG.instructionText;
+      document.getElementById('dynamic-btn-mom').innerText = TEMPLATE_CONFIG.btnMomText;
+      document.getElementById('dynamic-btn-dad').innerText = TEMPLATE_CONFIG.btnDadText;
+      document.getElementById('dynamic-btn-other').innerText = TEMPLATE_CONFIG.btnOtherText;
+      document.getElementById('dynamic-thanks').innerHTML = TEMPLATE_CONFIG.thanksText;
+      document.getElementById('dynamic-store-link').href = TEMPLATE_CONFIG.storeLink;
+      document.getElementById('dynamic-store-name').innerText = TEMPLATE_CONFIG.storeName;
+    }
 
     function handlePhotoClick() {
       if (document.body.classList.contains('edit-mode')) {
@@ -174,6 +214,10 @@
     }
 
     window.onload = function() {
+      // 1. 설정된 문구들을 먼저 화면에 뿌려줍니다.
+      applyTemplateConfig();
+
+      // 2. 사용자가 저장한 데이터(사진, 정보, 번호)를 불러옵니다.
       var savedPhoto = localStorage.getItem('familyPhoto');
       if (savedPhoto) renderPhoto(savedPhoto);
 
