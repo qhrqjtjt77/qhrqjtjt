@@ -21,16 +21,16 @@
     body.edit-mode .photo-area:not(.has-photo) .photo-placeholder-text { display: block; color: #d4a000; }
     body.edit-mode .photo-area.has-photo { cursor: pointer; border: 3px dashed #ffc000; }
 
-    /* 안내 문구 */
-    .instruction { font-size: 17px; line-height: 1.6; color: #e15f41; margin: 0 0 25px; font-weight: 700; background: #ffeeea; padding: 12px; border-radius: 15px; }
+    /* 중간 안내 문구 */
+    .instruction { font-size: 17px; line-height: 1.6; color: #e15f41; margin: 0 0 25px; font-weight: 700; background: #ffeeea; padding: 15px; border-radius: 15px; }
 
     /* 버튼 스타일 - 대비가 확실하고 따뜻한 색상 */
     .btn-group { display: flex; flex-direction: column; gap: 14px; margin-bottom: 25px; }
     .btn { display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 18px; border-radius: 20px; font-size: 20px; font-weight: 800; color: #fff; transition: transform 0.1s, box-shadow 0.1s; box-shadow: 0 6px 15px rgba(0,0,0,0.12); }
     .btn:active { transform: scale(0.98); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     
-    .btn.primary { background: linear-gradient(135deg, #ff7e67 0%, #ff5252 100%); } /* 엄마: 따뜻한 코랄 레드 */
-    .btn.secondary { background: linear-gradient(135deg, #4aabff 0%, #1e90ff 100%); } /* 아빠: 밝고 맑은 블루 */
+    .btn.primary { background: linear-gradient(135deg, #ff7e67 0%, #ff5252 100%); }
+    .btn.secondary { background: linear-gradient(135deg, #4aabff 0%, #1e90ff 100%); }
 
     /* 아이 정보 박스 */
     .info-box { background: #fdfdfd; border-radius: 20px; padding: 22px; text-align: left; font-size: 16px; line-height: 1.8; color: #444; border: 2px solid #f0f0f0; }
@@ -41,8 +41,8 @@
     .other-contact { display: flex; align-items: center; justify-content: center; gap: 8px; background: #2bcbba; color: #fff; text-decoration: none; padding: 15px; border-radius: 15px; font-weight: 800; margin-top: 20px; font-size: 16px; box-shadow: 0 4px 10px rgba(43,203,186,0.3); }
     .other-contact:active { transform: scale(0.98); }
 
-    /* 수정된 하단 감사 문구 (줄바꿈 적용) */
-    .thanks { font-size: 15px; color: #666; margin-top: 20px; text-align: center; display: block; width: 100%; line-height: 1.6; font-weight: 600; }
+    /* 하단 안심 독려 문구 */
+    .thanks { font-size: 15px; color: #e74c3c; margin-top: 20px; text-align: center; display: block; width: 100%; line-height: 1.6; font-weight: 700; background: #fff0f0; padding: 15px; border-radius: 12px; box-sizing: border-box;}
 
     /* 하단 스마트스토어 링크 표기 */
     .footer-link { text-decoration: none; display: block; -webkit-tap-highlight-color: transparent; }
@@ -92,7 +92,7 @@
       <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="loadPhoto(event)">
     </div>
 
-    <p class="instruction">길을 잃은 아이를 발견하셨다면<br>아래 버튼을 눌러 연락해주세요 🆘</p>
+    <p class="instruction">아이에게 도움이 필요해 보인다면<br>아래 버튼으로 전화 부탁드립니다.<br>💛 감사합니다 💛</p>
 
     <div class="btn-group">
       <div>
@@ -116,7 +116,7 @@
         <div class="edit-tel"><input type="tel" id="input-tel-grandma" value="" placeholder="예) 010-0000-0000"></div>
       </div>
       
-      <span class="thanks">아이에게 도움이 필요해 보인다면 위 번호로 전화 부탁드립니다.<br>💛 감사합니다 💛</span>
+      <span class="thanks">늦은 시간이나 사소한 일이라도 괜찮습니다.<br>아이가 혼자 있다면 망설이지 말고 꼭 연락해 주세요.<br>당신의 작은 관심이 큰 도움이 됩니다. 🙏</span>
     </div>
 
     <a href="https://smartstore.naver.com/orol_xx" target="_blank" class="footer-link">
